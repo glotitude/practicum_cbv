@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import TemplateView
 
 from .models import Note
 
@@ -37,3 +38,12 @@ class NotesView(View):
         note.save()
 
         return HttpResponse('Ok')
+
+
+class NotesTemplate(TemplateView):
+    template_name = "notes.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['notes'] = Note.objects.all()
+        return context
